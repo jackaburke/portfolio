@@ -1,3 +1,6 @@
+// Import everything
+@use 'bootstrap/scss/bootstrap';
+
 // Optional variable overrides
 $primary: #ffa500;
 
@@ -14,6 +17,3 @@ $primary: #ffa500;
 h1, h2 {
  font-family: 'InterVariable', sans-serif;
 }
-
-// Import everything
-@import 'bootstrap/scss/bootstrap';
