@@ -15,12 +15,21 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  lint-and-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: ESLint
+        run: npm run lint
+      - name: astro check
+        run: npm run astro check
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
+      - name: Install, build, and upload
         uses: withastro/action@v3
         # with:
           # path: . # The root location of your Astro project inside the repository. (optional)
