@@ -18,6 +18,8 @@ jobs:
   lint-and-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository using git
+        uses: actions/checkout@v4
       - name: ESLint
         run: npm run lint
       - name: astro check
