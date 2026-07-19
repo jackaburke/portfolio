@@ -5,7 +5,7 @@ export const site = {
   tagline:
     'Technology consultant building considered, dependable products.',
   description:
-    'Portfolio of Jack Burke, technology consultant — selected projects, research and apps.',
+    'Portfolio of Jack Burke, technology consultant -- selected projects, research and apps.',
 
   // Rendered in the sidebar, top to bottom
   details: [
@@ -28,5 +28,5 @@ export const site = {
 
   copyrightYear: 2026,
   privacyNote:
-    'This site uses Cloudflare Web Analytics for cookieless, privacy-first analytics — no cookies, no personal data, no cross-site tracking.',
+    'This site uses Cloudflare Web Analytics for cookieless, privacy-first analytics.',
 };
