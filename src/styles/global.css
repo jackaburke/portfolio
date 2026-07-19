@@ -71,6 +71,22 @@
     overflow-y: auto;
     scrollbar-color: rgb(240 238 227 / 50%) var(--color-primary);
   }
+
+  /* Safari/Chrome ignore scrollbar-color's dark-on-dark pairing above, so
+     without this the sidebar's internal scrollbar renders with the same
+     light track used by the page's own scrollbar on the right */
+  aside::-webkit-scrollbar-track {
+    background: var(--color-primary);
+  }
+
+  aside::-webkit-scrollbar-thumb {
+    background: rgb(240 238 227 / 50%);
+    border: 3px solid var(--color-primary);
+  }
+
+  aside::-webkit-scrollbar-thumb:hover {
+    background: rgb(240 238 227 / 75%);
+  }
 }
 
 @media (width >= 992px) and (height <= 799px) {
