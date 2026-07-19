@@ -27,5 +27,6 @@ export const site = {
   repo: 'https://github.com/jackaburke/portfolio',
 
   copyrightYear: 2026,
-  privacyNote: 'This site sets no cookies and collects no personal data.',
+  privacyNote:
+    'This site uses Cloudflare Web Analytics for cookieless, privacy-first analytics — no cookies, no personal data, no cross-site tracking.',
 };
