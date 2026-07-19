@@ -1,0 +1,252 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/instrument-sans';
+
+@theme {
+  --font-sans: 'Instrument Sans Variable', helvetica, arial, sans-serif;
+  --font-mono: ui-monospace, menlo, monospace;
+
+  /* 992px switches desktop vs mobile layout; sm/xl only step the card grid */
+  --breakpoint-sm: 640px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --color-page: #dcdacf;
+  --color-primary: #484c3d;
+  --color-primary-raised: #545847;
+  --color-foreground: #2b2f28;
+  --color-muted: #5a5e53;
+  --color-faint: #5b5f52;
+  --color-surface: #ecebe1;
+  --color-surface-dim: #e6e5da;
+  --color-chip: #e0dfd2;
+  --color-chip-foreground: #4b4f42;
+  --color-inverse: #f0eee3;
+  --color-inverse-soft: #e6e4d6;
+  --color-inverse-muted: #babda9;
+  --color-accent: #d6b88f;
+  --color-link: #84502e;
+  --color-divider: rgb(43 47 40 / 25%);
+  --color-divider-strong: rgb(43 47 40 / 35%);
+  --color-edge: rgb(43 47 40 / 14%);
+  --color-edge-inverse: rgb(240 238 227 / 20%);
+}
+
+/* Desktop navbar height — the sticky sidebar offsets hang off this */
+:root {
+  --nav-h: 74px;
+}
+
+/* scrollbar-color is Firefox-only here — setting it in Chrome would disable
+   the -webkit rules below, which carry the rounded shape */
+@supports (-moz-appearance: none) {
+  html {
+    scrollbar-color: var(--color-primary) var(--color-page);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 999px;
+  border: 3px solid var(--color-page);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-raised);
+}
+
+/* On shorter windows the pinned sidebar compacts so the whole profile stays
+   in view; internal scroll is only a backstop for tiny windows */
+@media (width >= 992px) {
+  aside {
+    position: sticky;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
+    overflow-y: auto;
+    scrollbar-color: rgb(240 238 227 / 50%) var(--color-primary);
+  }
+}
+
+@media (width >= 992px) and (height <= 799px) {
+  aside[aria-label] {
+    padding-top: 28px;
+    padding-bottom: 32px;
+  }
+
+  aside .profile-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  aside .profile-name {
+    margin-top: 16px;
+    font-size: 20px;
+  }
+
+  aside .socials {
+    margin-bottom: 22px;
+  }
+
+  aside .detail {
+    gap: 14px;
+  }
+}
+
+a {
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+/* inverse ring on the dark surfaces where the link colour would not stand out */
+aside :focus-visible,
+header button:focus-visible,
+.mobile-menu :focus-visible {
+  outline-color: var(--color-inverse);
+}
+
+.skip-link:focus-visible {
+  outline-color: var(--color-inverse);
+  outline-offset: -4px;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-inverse);
+}
+
+.social-btn {
+  @apply flex flex-1 items-center justify-center gap-[7px] lg:gap-2
+    bg-primary-raised border border-edge-inverse rounded-[3px] py-[9px] lg:py-[10px]
+    text-[12.5px] lg:text-[13px] font-medium text-inverse no-underline;
+}
+
+.detail dt {
+  @apply text-[11.5px] lg:text-[12.5px] font-semibold text-inverse-muted mb-[3px] lg:mb-[5px];
+}
+
+.detail dd {
+  @apply m-0 text-[13px] lg:text-[13.5px] leading-[1.5] lg:leading-[1.55] font-medium text-inverse-soft;
+}
+
+.tool-tag {
+  @apply text-[10.5px] lg:text-[11px] font-medium text-chip-foreground bg-chip
+    rounded-[3px] px-[7px] py-[2px] lg:px-2 lg:py-[3px];
+}
+
+.project-card {
+  @apply flex flex-col bg-surface border border-edge rounded overflow-hidden no-underline
+    transition-transform duration-[180ms] ease-out;
+
+  /* skip layout/paint for cards below the fold */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 390px;
+}
+
+/* The title anchor's hit area stretches over the whole card; footer links
+   sit above it via z-index (see ProjectCard.astro) */
+.card-link {
+  @apply text-inherit no-underline;
+}
+
+.card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.card-link:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.card-link:focus-visible {
+  outline: none;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Card hover underlines the title — unless the pointer is on a footer link,
+   which then underlines itself alone */
+.project-card:has(.card-link:focus-visible) .card-title,
+.project-card:hover:not(:has(.card-ext:hover)) .card-title {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.project-card:has(.card-link:focus-visible) {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+.card-ext:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+/* Stripe colours come per card via --s1/--s2 (see ProjectCard.astro) */
+.thumb {
+  @apply aspect-[16/9] flex items-center justify-center font-mono text-[10px] lg:text-[11px];
+
+  background: repeating-linear-gradient(
+    45deg,
+    var(--s1),
+    var(--s1) 8px,
+    var(--s2) 8px,
+    var(--s2) 16px
+  );
+}
+
+/* flex-1 pushes the footer strip to the bottom of equal-height cards */
+.card-body {
+  @apply flex-1 px-[15px] pt-3 pb-[15px] lg:px-[18px] lg:pt-4 lg:pb-5;
+}
+
+.card-title {
+  @apply mb-1 lg:mb-[6px] text-sm lg:text-[15px] font-semibold text-foreground;
+}
+
+.card-desc {
+  @apply mb-[10px] lg:mb-3 text-xs leading-[1.5] lg:text-[13px] lg:leading-[1.55] font-medium text-muted;
+}
+
+.card-tags {
+  @apply flex flex-wrap gap-[5px] lg:gap-[6px];
+}
+
+.card-foot {
+  @apply flex items-center justify-end gap-[14px] whitespace-nowrap bg-surface-dim
+    border-t border-edge px-[15px] py-[9px] lg:px-[18px] lg:py-[10px]
+    text-[11px] lg:text-[11.5px] font-medium;
+}
+
+.card-ext {
+  @apply flex items-center gap-[5px] text-link;
+}
+
+.ext-icon {
+  @apply w-[11px] h-[11px] lg:w-3 lg:h-3;
+}
