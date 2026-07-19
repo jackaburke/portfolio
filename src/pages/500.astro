@@ -1,3 +1,15 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { site } from '../site.config';
 ---
-<h1>now how did you do this</h1>
+
+<Layout title={`Something went wrong — ${site.name}`}>
+  <Navbar />
+  <main id="main" class="flex flex-col items-center text-center px-6 py-24">
+    <p class="font-mono text-[13px] text-faint mb-3">500</p>
+    <h1 class="text-[22px] lg:text-[26px] font-semibold mb-2">Something went wrong</h1>
+    <p class="text-[14px] font-medium text-muted mb-6">Try again in a moment.</p>
+    <a href="/" class="text-[13px] font-medium text-link no-underline">&larr; Back to the homepage</a>
+  </main>
+</Layout>
