@@ -1,0 +1,37 @@
+---
+import { site } from '../site.config';
+
+// inset lines the footer up with the homepage main column's 48px padding
+const { inset = true } = Astro.props;
+---
+
+<!-- Sits beside <main>, not inside it, so it keeps its contentinfo landmark -->
+<footer
+  class:list={[
+    'mt-8 lg:mt-14 border-t border-divider px-[22px] py-5 lg:px-0 lg:pt-6 lg:pb-16',
+    inset && 'lg:mx-12',
+  ]}
+>
+  <div class="flex flex-col gap-2 lg:flex-row items-center justify-between">
+    <div class="flex items-center gap-[14px] text-xs">
+      <span class="text-muted font-medium">&copy; {site.copyrightYear} &middot; Built by {site.name}</span>
+      <a href={site.repo} target="_blank" rel="noopener" class="flex items-center gap-[5px] font-medium text-link no-underline">
+        View on GitHub
+        <svg class="w-3 h-3" aria-hidden="true"><use href="#i-ext"></use></svg>
+        <span class="sr-only">(opens in new tab)</span>
+      </a>
+    </div>
+    <nav class="flex gap-[18px] text-xs font-medium" aria-label="Social links">
+      <a href={site.links.linkedin} target="_blank" rel="noopener" class="text-link no-underline">
+        LinkedIn<span class="sr-only"> (opens in new tab)</span>
+      </a>
+      <a href={site.links.github} target="_blank" rel="noopener" class="text-link no-underline">
+        GitHub<span class="sr-only"> (opens in new tab)</span>
+      </a>
+      <a href={`mailto:${site.links.email}`} class="text-link no-underline">Email</a>
+    </nav>
+  </div>
+  <p class="mt-3 text-[11px] font-medium text-faint text-center lg:text-left">
+    {site.privacyNote}
+  </p>
+</footer>

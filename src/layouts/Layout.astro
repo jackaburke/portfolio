@@ -1,2 +1,54 @@
 ---
+import '../styles/global.css';
+import { site } from '../site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = `${site.name} — ${site.role}`, description = site.description } = Astro.props;
 ---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#484c3d" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-page font-sans text-foreground antialiased">
+    <!-- Hidden until keyboard-focused; then a full-width bar that pushes the
+         page down rather than overlapping the navbar -->
+    <a
+      href="#main"
+      class="skip-link sr-only focus:not-sr-only focus:block focus:w-full
+             focus:bg-primary focus:text-inverse focus:text-center focus:px-4 focus:py-3
+             text-[13px] font-medium no-underline"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Shared external-link icon, referenced via <use href="#i-ext"> -->
+    <svg class="hidden" aria-hidden="true">
+      <symbol
+        id="i-ext"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M15 3h6v6"></path>
+        <path d="M10 14 21 3"></path>
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+      </symbol>
+    </svg>
+
+    <slot />
+  </body>
+</html>

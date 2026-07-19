@@ -1,0 +1,71 @@
+---
+import { site } from '../site.config';
+
+const { active = 'About' } = Astro.props;
+const items = ['About', 'Projects', 'Contact'];
+---
+
+<header
+  class="sticky top-0 z-20 flex items-center justify-between px-[22px] h-14 bg-primary border-b-2 border-edge-inverse
+         lg:bg-page lg:border-divider-strong lg:px-12 lg:h-[var(--nav-h)]"
+>
+  <a href="/" class="text-[clamp(16px,4.4vw,20px)] lg:text-[20px] font-semibold text-inverse lg:text-foreground no-underline">
+    {site.name}
+  </a>
+  <nav class="hidden lg:flex gap-[34px] text-sm" aria-label="Primary">
+    {
+      items.map((item) =>
+        item === active ? (
+          <a href="/" class="text-foreground font-medium no-underline" aria-current="page">
+            {item}
+          </a>
+        ) : (
+          <a href="/" class="text-faint font-medium no-underline">
+            {item}
+          </a>
+        )
+      )
+    }
+  </nav>
+
+  <!-- Native popover: the browser wires up open/close, Escape, light-dismiss
+       and the expanded state — no JavaScript involved -->
+  <button type="button" popovertarget="mobile-menu" class="lg:hidden text-[13px] font-semibold text-inverse-soft">
+    Menu
+  </button>
+</header>
+
+<nav
+  popover
+  id="mobile-menu"
+  aria-label="Primary"
+  class="mobile-menu fixed inset-x-0 top-14 bottom-auto m-0 w-full border-0 border-b-2 border-edge-inverse
+         bg-primary px-[22px] py-2 lg:hidden"
+>
+  {
+    items.map((item) =>
+      item === active ? (
+        <a
+          href="/"
+          class="block py-3 text-[14px] font-semibold text-inverse no-underline border-b border-edge-inverse last:border-b-0"
+          aria-current="page"
+        >
+          {item}
+        </a>
+      ) : (
+        <a
+          href="/"
+          class="block py-3 text-[14px] font-medium text-inverse-soft no-underline border-b border-edge-inverse last:border-b-0"
+        >
+          {item}
+        </a>
+      )
+    )
+  }
+</nav>
+
+<style>
+  #mobile-menu::backdrop {
+    background: rgb(43 47 40 / 35%);
+  }
+</style>

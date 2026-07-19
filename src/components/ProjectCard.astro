@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tools, links, thumb } = project.data;
+---
+
+<!-- The title anchor stretches over the whole card (see .card-link in
+     global.css); footer links sit above it on their own z-index, so all
+     targets are real, independently focusable anchors -->
+<article class="project-card relative">
+  <div class="thumb" aria-hidden="true" style={`--s1:${thumb.s1}; --s2:${thumb.s2}; color:${thumb.fg}`}>
+    {thumb.label}
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">
+      <a href={`/projects/${project.id}/`} class="card-link">{title}</a>
+    </h3>
+    <p class="card-desc">{description}</p>
+    <div class="card-tags">
+      {tools.map((tool) => <span class="tool-tag">{tool}</span>)}
+    </div>
+  </div>
+  {
+    links.length > 0 && (
+      <div class="card-foot">
+        {links.map((link) => (
+          <a href={link.url} target="_blank" rel="noopener" class="card-ext relative z-10">
+            {link.label}
+            <svg class="ext-icon" aria-hidden="true">
+              <use href="#i-ext" />
+            </svg>
+            <span class="sr-only"> (opens in new tab)</span>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</article>
