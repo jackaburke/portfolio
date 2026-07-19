@@ -35,6 +35,12 @@
   --nav-h: 74px;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* scrollbar-color is Firefox-only here — setting it in Chrome would disable
    the -webkit rules below, which carry the rounded shape */
 @supports (-moz-appearance: none) {

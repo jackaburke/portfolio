@@ -2,7 +2,10 @@
 import { site } from '../site.config';
 
 const { active = 'About' } = Astro.props;
-const items = ['About', 'Projects', 'Contact'];
+const items = [
+  { label: 'About', href: '/' },
+  { label: 'Projects', href: '/#projects' },
+];
 ---
 
 <header
@@ -15,13 +18,13 @@ const items = ['About', 'Projects', 'Contact'];
   <nav class="hidden lg:flex gap-[34px] text-sm" aria-label="Primary">
     {
       items.map((item) =>
-        item === active ? (
-          <a href="/" class="text-foreground font-medium no-underline" aria-current="page">
-            {item}
+        item.label === active ? (
+          <a href={item.href} class="text-foreground font-medium no-underline" aria-current="page">
+            {item.label}
           </a>
         ) : (
-          <a href="/" class="text-faint font-medium no-underline">
-            {item}
+          <a href={item.href} class="text-faint font-medium no-underline">
+            {item.label}
           </a>
         )
       )
@@ -44,20 +47,20 @@ const items = ['About', 'Projects', 'Contact'];
 >
   {
     items.map((item) =>
-      item === active ? (
+      item.label === active ? (
         <a
-          href="/"
+          href={item.href}
           class="block py-3 text-[14px] font-semibold text-inverse no-underline border-b border-edge-inverse last:border-b-0"
           aria-current="page"
         >
-          {item}
+          {item.label}
         </a>
       ) : (
         <a
-          href="/"
+          href={item.href}
           class="block py-3 text-[14px] font-medium text-inverse-soft no-underline border-b border-edge-inverse last:border-b-0"
         >
-          {item}
+          {item.label}
         </a>
       )
     )

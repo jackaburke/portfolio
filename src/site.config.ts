@@ -19,8 +19,8 @@ export const site = {
   ],
 
   links: {
-    linkedin: 'https://linkedin.com',
-    github: 'https://github.com',
+    linkedin: 'https://www.linkedin.com/in/jackaburke/',
+    github: 'https://github.com/jackaburke/portfolio',
     email: 'hello@example.com',
   },
 
