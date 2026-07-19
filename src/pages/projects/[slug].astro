@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
@@ -47,9 +48,7 @@ const { Content } = await render(project);
               class="flex items-center gap-[5px] text-xs font-medium text-accent no-underline"
             >
               {link.label}
-              <svg class="w-3 h-3" aria-hidden="true">
-                <use href="#i-ext" />
-              </svg>
+              <Icon name="lucide:external-link" class="w-3 h-3" aria-hidden="true" />
               <span class="sr-only"> (opens in new tab)</span>
             </a>
           ))
@@ -61,7 +60,7 @@ const { Content } = await render(project);
   <div class="lg:flex lg:justify-center">
     <div class="w-full max-w-[760px] min-w-0 flex flex-col min-h-[60vh]">
       <main id="main" class="flex-1 px-6 pt-8 pb-4 lg:px-0 lg:pt-10 scroll-mt-[56px] lg:scroll-mt-[var(--nav-h)]">
-        <article class="text-[14px] lg:text-[15px] leading-[1.65] text-muted [&_h2]:text-foreground [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:mb-4 [&_a]:text-link">
+        <article class="text-[14px] lg:text-[15px] leading-[1.65] font-medium text-muted [&_h2]:text-foreground [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:mb-4 [&_a]:text-link">
           <Content />
         </article>
       </main>
