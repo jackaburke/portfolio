@@ -12,7 +12,7 @@ const items = [
   class="sticky top-0 z-20 flex items-center justify-between px-[22px] h-14 bg-primary border-b-2 border-edge-inverse
          lg:bg-page lg:border-divider-strong lg:px-12 lg:h-[var(--nav-h)]"
 >
-  <a href="/" class="text-[clamp(16px,4.4vw,20px)] lg:text-[20px] font-semibold text-inverse lg:text-foreground no-underline">
+  <a href="/" class="text-logo font-semibold text-inverse lg:text-foreground no-underline">
     {site.name}
   </a>
   <nav class="hidden lg:flex gap-[34px] text-sm" aria-label="Primary">
@@ -33,7 +33,7 @@ const items = [
 
   <!-- Native popover: the browser wires up open/close, Escape, light-dismiss
        and the expanded state — no JavaScript involved -->
-  <button type="button" popovertarget="mobile-menu" class="lg:hidden text-[13px] font-semibold text-inverse-soft">
+  <button type="button" popovertarget="mobile-menu" class="lg:hidden text-nav font-semibold text-inverse-soft">
     Menu
   </button>
 </header>
@@ -50,7 +50,7 @@ const items = [
       item.label === active ? (
         <a
           href={item.href}
-          class="block py-3 text-[14px] font-semibold text-inverse no-underline border-b border-edge-inverse last:border-b-0"
+          class="block py-3 text-body font-semibold text-inverse no-underline border-b border-edge-inverse last:border-b-0"
           aria-current="page"
         >
           {item.label}
@@ -58,7 +58,7 @@ const items = [
       ) : (
         <a
           href={item.href}
-          class="block py-3 text-[14px] font-medium text-inverse-soft no-underline border-b border-edge-inverse last:border-b-0"
+          class="block py-3 text-body font-medium text-inverse-soft no-underline border-b border-edge-inverse last:border-b-0"
         >
           {item.label}
         </a>

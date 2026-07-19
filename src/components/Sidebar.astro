@@ -21,10 +21,10 @@ import profilePhoto from '../assets/profile-photo.jpg';
     class="profile-photo w-[110px] h-[110px] lg:w-[150px] lg:h-[150px] rounded-full border-[1.5px] border-[rgba(240,238,227,.4)] flex-none object-cover"
   />
 
-  <h1 class="profile-name mt-4 lg:mt-[26px] mb-[2px] lg:mb-[3px] text-[clamp(19px,5.4vw,24px)] lg:text-2xl font-semibold text-inverse">
+  <h1 class="profile-name mt-4 lg:mt-[26px] mb-[2px] lg:mb-[3px] text-name font-semibold text-inverse">
     {site.name}
   </h1>
-  <p class="mb-4 lg:mb-5 text-[12.5px] lg:text-[13.5px] font-medium text-accent">{site.role}</p>
+  <p class="mb-4 lg:mb-5 text-detail font-medium text-accent">{site.role}</p>
 
   <div class="socials flex flex-col gap-2 w-full mb-[22px] lg:mb-9">
     <div class="flex gap-2">
@@ -50,7 +50,7 @@ import profilePhoto from '../assets/profile-photo.jpg';
           <dt>{row.label}</dt>
           <dd>
             {row.value}
-            {row.note && <span class="block text-[11.5px] lg:text-[12px] text-inverse-muted">{row.note}</span>}
+            {row.note && <span class="block text-caption text-inverse-muted">{row.note}</span>}
           </dd>
         </div>
       ))

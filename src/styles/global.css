@@ -28,6 +28,26 @@
   --color-divider-strong: rgb(43 47 40 / 35%);
   --color-edge: rgb(43 47 40 / 14%);
   --color-edge-inverse: rgb(240 238 227 / 20%);
+
+  /* Fieldnote type scale — one place to retune any size instead of hunting
+     arbitrary text-[Npx] values across components. Font-size only (no
+     paired line-height), so swapping a bracket value for a token here is a
+     1:1 visual no-op; leading is still set per-usage where it matters. */
+  --text-tag: 11px; /* .tool-tag, project tool chips */
+  --text-meta: 11.5px; /* .card-foot links */
+  --text-caption: 12px; /* footer copyright, sidebar detail note */
+  --text-label: 12.5px; /* .detail dt */
+  --text-compact: 13px; /* .social-btn, .card-desc */
+  --text-detail: 13.5px; /* .detail dd, sidebar role, "All projects" back link */
+  --text-nav: 14px; /* navbar mobile "Menu", skip link, 404/500 code + back link */
+  --text-body: 15px; /* .card-title, nav mobile menu items, 404/500 body, case-study copy */
+  --text-heading: 23px; /* 404/500 heading, mobile */
+  --text-heading-lg: 26px; /* 404/500 heading, desktop */
+  --text-title: 24px; /* case-study title, mobile */
+  --text-title-lg: 30px; /* case-study title, desktop */
+  --text-logo: clamp(17px, 4.4vw, 20px); /* navbar name — already caps at 20px well under lg */
+  --text-name: clamp(19px, 5.4vw, 24px); /* sidebar name — already caps at 24px well under lg */
+  --text-display: clamp(20px, 6.2vw, 26px); /* homepage tagline — already caps at 26px well under lg */
 }
 
 /* Desktop navbar height — the sticky sidebar offsets hang off this */
@@ -155,19 +175,19 @@ header button:focus-visible,
 .social-btn {
   @apply flex flex-1 items-center justify-center gap-[7px] lg:gap-2
     bg-primary-raised border border-edge-inverse rounded-[3px] py-[9px] lg:py-[10px]
-    text-[12.5px] lg:text-[13px] font-medium text-inverse no-underline;
+    text-compact font-medium text-inverse no-underline;
 }
 
 .detail dt {
-  @apply text-[11.5px] lg:text-[12.5px] font-semibold text-inverse-muted mb-[3px] lg:mb-[5px];
+  @apply text-label font-semibold text-inverse-muted mb-[3px] lg:mb-[5px];
 }
 
 .detail dd {
-  @apply m-0 text-[13px] lg:text-[13.5px] leading-[1.5] lg:leading-[1.55] font-medium text-inverse-soft;
+  @apply m-0 text-detail leading-[1.5] lg:leading-[1.55] font-medium text-inverse-soft;
 }
 
 .tool-tag {
-  @apply text-[10.5px] lg:text-[11px] font-medium text-chip-foreground bg-chip
+  @apply text-tag font-medium text-chip-foreground bg-chip
     rounded-[3px] px-[7px] py-[2px] lg:px-2 lg:py-[3px];
 }
 
@@ -240,11 +260,11 @@ header button:focus-visible,
 }
 
 .card-title {
-  @apply mb-1 lg:mb-[6px] text-sm lg:text-[15px] font-semibold text-foreground;
+  @apply mb-1 lg:mb-[6px] text-body font-semibold text-foreground;
 }
 
 .card-desc {
-  @apply mb-[10px] lg:mb-3 text-xs leading-[1.5] lg:text-[13px] lg:leading-[1.55] font-medium text-muted;
+  @apply mb-[10px] lg:mb-3 text-compact leading-[1.5] lg:leading-[1.55] font-medium text-muted;
 }
 
 .card-tags {
@@ -254,7 +274,7 @@ header button:focus-visible,
 .card-foot {
   @apply flex items-center justify-end gap-[14px] whitespace-nowrap bg-surface-dim
     border-t border-edge px-[15px] py-[9px] lg:px-[18px] lg:py-[10px]
-    text-[11px] lg:text-[11.5px] font-medium;
+    text-meta font-medium;
 }
 
 .card-ext {
