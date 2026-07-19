@@ -69,6 +69,7 @@
     top: var(--nav-h);
     height: calc(100vh - var(--nav-h));
     overflow-y: auto;
+    scrollbar-gutter: stable;
     scrollbar-color: rgb(240 238 227 / 50%) var(--color-primary);
   }
 
@@ -223,17 +224,8 @@ header button:focus-visible,
   }
 }
 
-/* Stripe colours come per card via --s1/--s2 (see ProjectCard.astro) */
 .thumb {
-  @apply aspect-[16/9] flex items-center justify-center font-mono text-[10px] lg:text-[11px];
-
-  background: repeating-linear-gradient(
-    45deg,
-    var(--s1),
-    var(--s1) 8px,
-    var(--s2) 8px,
-    var(--s2) 16px
-  );
+  @apply aspect-[16/9] w-full object-cover;
 }
 
 /* flex-1 pushes the footer strip to the bottom of equal-height cards */

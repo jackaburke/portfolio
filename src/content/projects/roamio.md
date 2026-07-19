@@ -4,7 +4,8 @@ description: Travel planning app — itineraries, maps and shared trips.
 tools: [Ruby on Rails]
 links:
   - { label: GitHub, url: 'https://github.com' }
-thumb: { label: app screens, s1: '#ccd2c6', s2: '#d5dacf', fg: '#78806f' }
+thumbImage: '../../assets/projects/roamio.jpg'
+thumbAlt: 'Roamio app screens'
 featured: true
 order: 2
 ---
