@@ -1,13 +1,22 @@
 ---
 import '../styles/global.css';
 import { site } from '../site.config';
+import instrumentSansWoff2 from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
-const { title = `${site.name} — ${site.role}`, description = site.description } = Astro.props;
+const {
+  title = `${site.name} — ${site.role}`,
+  description = site.description,
+  image = '/og-image.png',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -15,10 +24,42 @@ const { title = `${site.name} — ${site.role}`, description = site.description 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#484c3d" />
-    <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#484c3d" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Preload the primary font subset so it fetches in parallel with the
+         stylesheet instead of being discovered only after the CSS parses -->
+    <link rel="preload" href={instrumentSansWoff2} as="font" type="font/woff2" crossorigin />
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+
+    <!-- Open Graph / Facebook, LinkedIn, iMessage, Slack, etc. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+    <meta property="og:locale" content="en_GB" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    <meta name="twitter:image:alt" content={`${site.name} — ${site.role}`} />
   </head>
   <body class="bg-page font-sans text-foreground antialiased">
     <!-- Hidden until keyboard-focused; then a full-width bar that pushes the
