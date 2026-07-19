@@ -1,0 +1,18 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  href: string;
+  label: string;
+  class?: string;
+  iconClass?: string;
+}
+
+const { href, label, class: className, iconClass = 'w-3 h-3' } = Astro.props;
+---
+
+<a href={href} target="_blank" rel="noopener" class={className}>
+  {label}
+  <Icon name="lucide:external-link" class={iconClass} aria-hidden="true" />
+  <span class="sr-only"> (opens in new tab)</span>
+</a>
