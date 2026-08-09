@@ -34,14 +34,12 @@ const imageURL = new URL(image, Astro.site);
          stylesheet instead of being discovered only after the CSS parses -->
     <link rel="preload" href={instrumentSansWoff2} as="font" type="font/woff2" crossorigin />
 
-    <!-- Favicons -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
     <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 
-    <!-- Open Graph / Facebook, LinkedIn, iMessage, Slack, etc. -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={site.name} />
@@ -53,7 +51,6 @@ const imageURL = new URL(image, Astro.site);
     <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
     <meta property="og:locale" content="en_GB" />
 
-    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL} />
     <meta name="twitter:title" content={title} />
