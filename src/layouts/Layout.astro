@@ -97,8 +97,26 @@ const personSchema = {
     <!-- astro:after-swap only fires on client-side transitions, never on the
          initial load, so this can't steal focus from a first-time visitor -->
     <script>
+      // html has scroll-behavior: smooth for in-page anchors (skip link,
+      // #projects). The router restores scroll position on back/forward
+      // navigation via a plain scrollTo(x, y) call with no explicit
+      // behavior, which — unlike a real hard back-navigation — inherits
+      // that smooth CSS and visibly animates into place instead of
+      // snapping instantly. Toggling scroll-behavior around the swap
+      // doesn't survive it (Astro resets the html element's attributes
+      // as part of swapping), so force instant at the call site instead;
+      // anchor-fragment scrolling never goes through window.scrollTo, so
+      // it's unaffected.
+      const nativeScrollTo = window.scrollTo.bind(window);
+      window.scrollTo = ((x?: number | any, y?: number) => {
+        if (typeof x === 'object') {
+          return nativeScrollTo(x.behavior ? x : { ...x, behavior: 'instant' });
+        }
+        return nativeScrollTo({ left: x, top: y, behavior: 'instant' });
+      }) as typeof window.scrollTo;
+
       document.addEventListener('astro:after-swap', () => {
-        document.getElementById('main')?.focus();
+        document.getElementById('main')?.focus({ preventScroll: true });
       });
     </script>
   </body>
