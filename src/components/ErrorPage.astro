@@ -14,7 +14,7 @@ const { code, heading, message } = Astro.props;
 
 <Layout title={`${heading} — ${site.name}`}>
   <Navbar />
-  <main id="main" class="flex flex-col items-center text-center px-6 py-24">
+  <main id="main" tabindex="-1" class="flex flex-col items-center text-center px-6 py-24">
     <p class="font-mono text-nav text-faint mb-3">{code}</p>
     <h1 class="text-heading lg:text-heading-lg font-semibold mb-2">{heading}</h1>
     <p class="text-body font-medium text-muted mb-6">{message}</p>

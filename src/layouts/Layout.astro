@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { site } from '../site.config';
 import instrumentSansWoff2 from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
 
@@ -76,6 +77,8 @@ const personSchema = {
     <meta name="twitter:image:alt" content={imageAlt} />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
+
+    <ClientRouter />
   </head>
   <body class="bg-page font-sans text-foreground antialiased">
     <!-- Hidden until keyboard-focused; then a full-width bar that pushes the
@@ -90,5 +93,13 @@ const personSchema = {
     </a>
 
     <slot />
+
+    <!-- astro:after-swap only fires on client-side transitions, never on the
+         initial load, so this can't steal focus from a first-time visitor -->
+    <script>
+      document.addEventListener('astro:after-swap', () => {
+        document.getElementById('main')?.focus();
+      });
+    </script>
   </body>
 </html>
