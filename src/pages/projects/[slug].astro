@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
@@ -15,11 +16,21 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, description, tools, links } = project.data;
+const { title, description, tools, links, thumbImage, thumbAlt } = project.data;
 const { Content } = await render(project);
+
+// Single fixed rendition for social crawlers, distinct from the card's responsive srcset
+const ogImage = await getImage({ src: thumbImage, width: 1200 });
 ---
 
-<Layout title={`${title} - ${site.name}`} description={description}>
+<Layout
+  title={`${title} - ${site.name}`}
+  description={description}
+  image={ogImage.src}
+  imageWidth={ogImage.attributes.width}
+  imageHeight={ogImage.attributes.height}
+  imageAlt={thumbAlt}
+>
   <Navbar active="Projects" />
 
   <section class="page-hero bg-primary border-b border-divider-strong">
