@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter, fade } from 'astro:transitions';
 import { site } from '../site.config';
 import instrumentSansWoff2 from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
 
@@ -37,7 +37,11 @@ const personSchema = {
 ---
 
 <!doctype html>
-<html lang="en">
+<!-- Home <-> project pages differ a lot in shape (card grid vs. article), so the
+     default crossfade duration leaves old/new content visibly overlapping;
+     a short fade keeps the same effect without the layout mismatch reading
+     as a glitch -->
+<html lang="en" transition:animate={fade({ duration: '0.15s' })}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -115,8 +119,26 @@ const personSchema = {
         return nativeScrollTo({ left: x, top: y, behavior: 'instant' });
       }) as typeof window.scrollTo;
 
+      // "All projects" / "Back to the homepage" are plain <a href="/"> links,
+      // not history navigation — so they've never restored scroll position,
+      // in this router or a browser's native back/forward. Once we know
+      // we're mid-session in client-routed navigation (i.e. this isn't the
+      // page's first load), treat data-back-link clicks as a real back-nav
+      // instead, so the existing scroll restoration above actually applies.
+      // A direct/shared link to a project page skips this (no prior
+      // history), and the link just behaves normally.
+      let cameViaRouter = false;
       document.addEventListener('astro:after-swap', () => {
+        cameViaRouter = true;
         document.getElementById('main')?.focus({ preventScroll: true });
+      });
+
+      document.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (cameViaRouter && target.closest('[data-back-link]')) {
+          event.preventDefault();
+          history.back();
+        }
       });
     </script>
   </body>
