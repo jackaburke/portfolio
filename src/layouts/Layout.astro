@@ -48,7 +48,11 @@ const personSchema = {
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#484c3d" />
+    <!-- Same value on every page, but without transition:persist the
+         router still tears this down and recreates it on each swap —
+         iOS Safari's status-bar tint reacts to that removal and briefly
+         flashes back to its default before the new tag reapplies it -->
+    <meta name="theme-color" content="#484c3d" transition:persist />
     <link rel="canonical" href={canonicalURL} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
