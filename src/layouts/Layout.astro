@@ -131,10 +131,38 @@ const personSchema = {
       // instead, so the existing scroll restoration above actually applies.
       // A direct/shared link to a project page skips this (no prior
       // history), and the link just behaves normally.
+      // The header is transition:persist'd (see Navbar.astro — Safari 26+
+      // colors the status bar from a sticky element's own CSS background,
+      // sampled at render time, and doesn't reliably redo that during a
+      // client-side swap; persisting keeps that element from ever being
+      // torn down and rebuilt mid-transition). Since persisting freezes
+      // its DOM, the desktop "About"/"Projects" highlight needs updating
+      // by hand instead of by re-render.
+      function syncNavActive() {
+        const isProjects = location.pathname.startsWith('/projects/');
+        document.querySelectorAll('header nav[aria-label="Primary"] a').forEach((a) => {
+          const isActive = a.getAttribute('href') === (isProjects ? '/#projects' : '/');
+          a.classList.toggle('text-foreground', isActive);
+          a.classList.toggle('text-faint', !isActive);
+          if (isActive) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
+        });
+      }
+
       let cameViaRouter = false;
       document.addEventListener('astro:after-swap', () => {
         cameViaRouter = true;
+        syncNavActive();
+        // preventScroll isn't fully reliable on every Safari version, and
+        // #main sits below the hero on project pages (not at the very top),
+        // so a focus-driven scroll-into-view would land partway down the
+        // page instead of at 0. Capture/restore the position around it so
+        // focusing #main can never move the viewport, regardless of
+        // whether preventScroll actually holds.
+        const x = window.scrollX;
+        const y = window.scrollY;
         document.getElementById('main')?.focus({ preventScroll: true });
+        window.scrollTo({ left: x, top: y, behavior: 'instant' });
       });
 
       document.addEventListener('click', (event) => {
