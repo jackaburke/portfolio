@@ -153,16 +153,14 @@ const personSchema = {
       document.addEventListener('astro:after-swap', () => {
         cameViaRouter = true;
         syncNavActive();
-        // preventScroll isn't fully reliable on every Safari version, and
-        // #main sits below the hero on project pages (not at the very top),
-        // so a focus-driven scroll-into-view would land partway down the
-        // page instead of at 0. Capture/restore the position around it so
-        // focusing #main can never move the viewport, regardless of
-        // whether preventScroll actually holds.
-        const x = window.scrollX;
-        const y = window.scrollY;
+        // Move focus to the new page's content so it is announced, the way
+        // a real navigation would. preventScroll keeps it from dragging
+        // the viewport down to #main, which sits below the hero on project
+        // pages. Deliberately no capture-and-restore of scrollY around
+        // this: the router's own restoration is not always settled by the
+        // time this fires, so re-asserting a position here can pin the
+        // page to a half-restored offset instead of protecting it.
         document.getElementById('main')?.focus({ preventScroll: true });
-        window.scrollTo({ left: x, top: y, behavior: 'instant' });
       });
 
       document.addEventListener('click', (event) => {
