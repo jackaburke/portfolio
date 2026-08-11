@@ -12,9 +12,9 @@ const items = [
   transition:persist
   transition:name="header"
   class="sticky top-0 z-20 flex items-center justify-between bg-primary border-b-2 border-edge-inverse
-         pt-(--safe-top) h-[calc(3.5rem+var(--safe-top))]
+         pt-(--safe-top) h-[calc(3.5rem+var(--safe-top))] min-h-14
          max-lg:pl-[max(22px,env(safe-area-inset-left))] max-lg:pr-[max(22px,env(safe-area-inset-right))]
-         lg:bg-page lg:border-divider-strong lg:px-12 lg:h-[calc(var(--nav-h)+var(--safe-top))]"
+         lg:bg-page lg:border-divider-strong lg:px-12 lg:h-[calc(var(--nav-h)+var(--safe-top))] lg:min-h-(--nav-h)"
 >
   <a href="/" class="text-logo font-semibold text-inverse lg:text-foreground no-underline">
     {site.name}
