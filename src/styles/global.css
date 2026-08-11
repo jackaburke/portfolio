@@ -61,6 +61,15 @@
   }
 }
 
+/* viewport-fit=cover lets the page run under the home indicator once
+   Safari's bottom bar is hidden, so reserve that strip. Safari reports 0
+   here while the bar is showing, which is also when the viewport is at its
+   shortest — so this only adds height in the state that has the room for
+   it, and cannot make an svh-sized page scrollable. */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* The navbar is transition:name="header", so its group animation morphs it
    between pages — that is the slide as the width changes between a
    scrolling and a non-scrolling page, and it is left untouched here.
