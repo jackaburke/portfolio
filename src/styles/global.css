@@ -61,6 +61,32 @@
   }
 }
 
+/* The navbar is transition:name="header", so its group animation morphs it
+   between pages — that is the slide as the width changes between a
+   scrolling and a non-scrolling page, and it is left untouched here.
+   What is removed is the snapshot cross-fade Astro layers on top: it fades
+   old out and new in with mix-blend-mode: plus-lighter, which in WebKit
+   drops the header to the page background for roughly a third of the
+   transition rather than holding steady.
+   The outgoing snapshot is the one held visible, not the incoming one —
+   under transition:persist the incoming snapshot comes up empty (verified:
+   holding it instead still leaves the header blank). Since the header
+   renders identically on every page, showing the outgoing snapshot for the
+   duration is seamless, and the real persisted element takes over the
+   moment the transition ends.
+   !important is required because CSS animations outrank normal
+   declarations. */
+::view-transition-old(header) {
+  animation: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+::view-transition-new(header) {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
 /* scrollbar-color is Firefox-only here — setting it in Chrome would disable
    the -webkit rules below, which carry the rounded shape */
 @supports (-moz-appearance: none) {
