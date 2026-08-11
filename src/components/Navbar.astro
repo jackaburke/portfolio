@@ -72,7 +72,23 @@ const items = [
 </nav>
 
 <style>
+  /* Leave the header strip undimmed. Safari tints its toolbar from the
+     sticky header's own background-color, and a translucent overlay
+     sitting on top of the header does not change that colour — so the
+     page would darken while the toolbar stayed bright green. The header
+     darkens itself instead, below. */
   #mobile-menu::backdrop {
-    background: rgb(43 47 40 / 35%);
+    background: linear-gradient(
+      to bottom,
+      transparent 0 calc(3.5rem + var(--safe-top, 0px)),
+      rgb(43 47 40 / 35%) calc(3.5rem + var(--safe-top, 0px))
+    );
+  }
+
+  /* #484c3d composited under the backdrop's 35% rgb(43 47 40) comes out at
+     #3e4236. Applying that as a real background-color keeps the header
+     matching the dimmed page while giving Safari a solid colour to sample. */
+  header:has(~ #mobile-menu:popover-open) {
+    background-color: #3e4236;
   }
 </style>
