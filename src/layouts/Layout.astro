@@ -38,10 +38,13 @@ const personSchema = {
 
 <!doctype html>
 <!-- Home <-> project pages differ a lot in shape (card grid vs. article), so the
-     default crossfade duration leaves old/new content visibly overlapping;
-     a short fade keeps the same effect without the layout mismatch reading
-     as a glitch -->
-<html lang="en" transition:animate={fade({ duration: '0.15s' })}>
+     default crossfade duration leaves old/new content visibly overlapping.
+     Kept shorter still because landing at the top of a new page makes iOS
+     Safari reveal its bottom bar: the snapshots are captured against the
+     taller toolbar-hidden viewport and then painted while the viewport
+     shrinks under them, so the less time that overlay is on screen the
+     less of that mismatch shows. -->
+<html lang="en" transition:animate={fade({ duration: '0.08s' })}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
