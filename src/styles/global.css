@@ -53,6 +53,12 @@
 /* Desktop navbar height — the sticky sidebar offsets hang off this */
 :root {
   --nav-h: 74px;
+
+  /* Status bar clearance. Zero in the browser, where Safari's own chrome
+     already occupies that strip, and only non-zero once the site is opened
+     from the home screen with no chrome above it. Held in a variable so it
+     is settable in tests, which cannot produce a real inset. */
+  --safe-top: env(safe-area-inset-top);
 }
 
 @media (prefers-reduced-motion: no-preference) {
