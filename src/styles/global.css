@@ -61,6 +61,18 @@
   }
 }
 
+/* html itself has no background of its own, so the canvas is only painted
+   by body's background propagating up to it. During a view transition the
+   page rendering is replaced by the snapshot overlay, and anything the
+   snapshots do not cover falls through to that canvas — which is where a
+   white flash comes from. Saved to the home screen there is no browser
+   chrome hiding the edges, so it shows. Painting html explicitly gives the
+   canvas a colour of its own that does not depend on body. Same cream as
+   body, so nothing changes visually in the browser. */
+html {
+  background-color: var(--color-page);
+}
+
 /* viewport-fit=cover lets the page run under the home indicator once
    Safari's bottom bar is hidden, so reserve that strip. Safari reports 0
    here while the bar is showing, which is also when the viewport is at its
