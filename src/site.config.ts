@@ -1,4 +1,6 @@
 // All personal info lives here — swap the placeholders for real content.
+const university = 'University of Sheffield';
+
 export const site = {
   name: 'Jack Burke',
   role: 'Technology Consultant',
@@ -7,6 +9,8 @@ export const site = {
   description:
     'Portfolio of Jack Burke, technology consultant -- selected projects, research and apps.',
 
+  university,
+
   // Rendered in the sidebar, top to bottom
   details: [
     {
@@ -14,7 +18,7 @@ export const site = {
       value: 'Technology Consultant at Solirius Reply',
       note: 'Oct 2025 - present',
     },
-    { label: 'Education', value: 'MComp Computer Science, University of Sheffield' },
+    { label: 'Education', value: `MComp Computer Science, ${university}` },
     { label: 'Location', value: 'London, UK' },
   ],
 
