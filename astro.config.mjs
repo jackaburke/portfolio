@@ -25,4 +25,9 @@ export default defineConfig({
   build: {
     assets: 'static',
   },
+  // A handful of static pages — cheap to prefetch every visible link
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
 });

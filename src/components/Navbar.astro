@@ -6,6 +6,23 @@ const items = [
   { label: 'About', href: '/' },
   { label: 'Projects', href: '/#projects' },
 ];
+
+const speculationRules = {
+  prerender: [
+    {
+      source: 'document',
+      where: {
+        and: [
+          { href_matches: '/*' },
+          { not: { href_matches: ['/404', '/500'] } },
+          { not: { selector_matches: '[target=_blank]' } },
+          { not: { selector_matches: '[rel~=external]' } },
+        ],
+      },
+      eagerness: 'moderate',
+    },
+  ],
+};
 ---
 
 <header
@@ -41,6 +58,10 @@ const items = [
     Menu
   </button>
 </header>
+
+<!-- Chromium speculation rules: prerender a link's destination on
+     hover/touch. Other browsers ignore the unknown script type. -->
+<script type="speculationrules" is:inline set:html={JSON.stringify(speculationRules)} />
 
 <nav
   popover
