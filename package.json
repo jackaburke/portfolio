@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
+    "dev:mobile": "./tools/dev-mobile.sh",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

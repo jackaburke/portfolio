@@ -16,6 +16,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      // Vite blocks unfamiliar Host headers; this is the name dev-mobile.sh uses.
+      // `||`, not `??`: an empty var leaves ".local", a wildcard to Vite.
+      allowedHosts: [`${process.env.DEV_MOBILE_NAME || 'portfolio'}.local`],
+    },
   },
   build: {
     assets: 'static',
