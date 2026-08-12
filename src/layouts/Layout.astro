@@ -41,13 +41,10 @@ const personSchema = {
 ---
 
 <!doctype html>
-<!-- Home <-> project pages differ a lot in shape (card grid vs. article), so the
-     default crossfade duration leaves old/new content visibly overlapping.
-     Kept shorter still because landing at the top of a new page makes iOS
-     Safari reveal its bottom bar: the snapshots are captured against the
-     taller toolbar-hidden viewport and then painted while the viewport
-     shrinks under them, so the less time that overlay is on screen the
-     less of that mismatch shows. -->
+<!-- Short fade: the pages differ a lot in shape, so a longer crossfade shows
+     old/new content overlapping. Touch devices skip the fade entirely
+     (see global.css) because Safari's URL bar resizes the viewport on
+     navigation, which makes any transition overlay visibly jump. -->
 <html lang="en" transition:animate={fade({ duration: '0.08s' })}>
   <head>
     <meta charset="utf-8" />
@@ -55,10 +52,8 @@ const personSchema = {
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <!-- Same value on every page, but without transition:persist the
-         router still tears this down and recreates it on each swap —
-         iOS Safari's status-bar tint reacts to that removal and briefly
-         flashes back to its default before the new tag reapplies it -->
+    <!-- Persisted so iOS Safari's status-bar tint doesn't flash back to its
+         default when the router recreates the tag on each swap -->
     <meta name="theme-color" content="#484c3d" transition:persist />
     <link rel="canonical" href={canonicalURL} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -66,6 +61,20 @@ const personSchema = {
     <!-- Preload the primary font subset so it fetches in parallel with the
          stylesheet instead of being discovered only after the CSS parses -->
     <link rel="preload" href={instrumentSansWoff2} as="font" type="font/woff2" crossorigin />
+
+    <!-- font-display: optional — on a hard load the text either paints in
+         this font or stays on the fallback; it never swaps mid-view -->
+    <style
+      is:inline
+      set:html={`@font-face {
+  font-family: 'Instrument Sans Variable';
+  font-style: normal;
+  font-display: optional;
+  font-weight: 400 700;
+  src: url(${instrumentSansWoff2}) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}`}
+    />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -93,7 +102,14 @@ const personSchema = {
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
 
-    <ClientRouter />
+    <!-- Touch devices skip the View Transition API — its snapshots freeze
+         the page while Safari's chrome resizes the viewport. Without it the
+         router falls back to a plain instant swap. -->
+    <script is:inline>
+      if (matchMedia('(hover: none)').matches) document.startViewTransition = undefined;
+    </script>
+
+    <ClientRouter fallback="swap" />
   </head>
   <body class="bg-page font-sans text-foreground antialiased">
     <!-- Hidden until keyboard-focused; then a full-width bar that pushes the
@@ -112,39 +128,23 @@ const personSchema = {
     <!-- astro:after-swap only fires on client-side transitions, never on the
          initial load, so this can't steal focus from a first-time visitor -->
     <script>
-      // html has scroll-behavior: smooth for in-page anchors (skip link,
-      // #projects). The router restores scroll position on back/forward
-      // navigation via a plain scrollTo(x, y) call with no explicit
-      // behavior, which — unlike a real hard back-navigation — inherits
-      // that smooth CSS and visibly animates into place instead of
-      // snapping instantly. Toggling scroll-behavior around the swap
-      // doesn't survive it (Astro resets the html element's attributes
-      // as part of swapping), so force instant at the call site instead;
-      // anchor-fragment scrolling never goes through window.scrollTo, so
-      // it's unaffected.
+      // The router's scroll restoration would inherit the smooth
+      // scroll-behavior meant for in-page anchors, so force instant here.
+      // On touch, land at 1px instead of 0: reaching absolute top makes
+      // Safari re-expand its collapsed toolbars.
+      const touch = matchMedia('(hover: none)').matches;
       const nativeScrollTo = window.scrollTo.bind(window);
       window.scrollTo = ((x?: number | any, y?: number) => {
         if (typeof x === 'object') {
-          return nativeScrollTo(x.behavior ? x : { ...x, behavior: 'instant' });
+          const opts = x.behavior ? x : { ...x, behavior: 'instant' };
+          if (touch && opts.top === 0) opts.top = 1;
+          return nativeScrollTo(opts);
         }
-        return nativeScrollTo({ left: x, top: y, behavior: 'instant' });
+        return nativeScrollTo({ left: x, top: touch && y === 0 ? 1 : y, behavior: 'instant' });
       }) as typeof window.scrollTo;
 
-      // "All projects" / "Back to the homepage" are plain <a href="/"> links,
-      // not history navigation — so they've never restored scroll position,
-      // in this router or a browser's native back/forward. Once we know
-      // we're mid-session in client-routed navigation (i.e. this isn't the
-      // page's first load), treat data-back-link clicks as a real back-nav
-      // instead, so the existing scroll restoration above actually applies.
-      // A direct/shared link to a project page skips this (no prior
-      // history), and the link just behaves normally.
-      // The header is transition:persist'd (see Navbar.astro — Safari 26+
-      // colors the status bar from a sticky element's own CSS background,
-      // sampled at render time, and doesn't reliably redo that during a
-      // client-side swap; persisting keeps that element from ever being
-      // torn down and rebuilt mid-transition). Since persisting freezes
-      // its DOM, the desktop "About"/"Projects" highlight needs updating
-      // by hand instead of by re-render.
+      // The header is transition:persist'd, which freezes its DOM — so the
+      // desktop About/Projects highlight is updated by hand on each swap.
       function syncNavActive() {
         const isProjects = location.pathname.startsWith('/projects/');
         document.querySelectorAll('header nav[aria-label="Primary"] a').forEach((a) => {
@@ -160,13 +160,14 @@ const personSchema = {
       document.addEventListener('astro:after-swap', () => {
         cameViaRouter = true;
         syncNavActive();
-        // Move focus to the new page's content so it is announced, the way
-        // a real navigation would. preventScroll keeps it from dragging
-        // the viewport down to #main, which sits below the hero on project
-        // pages. Deliberately no capture-and-restore of scrollY around
-        // this: the router's own restoration is not always settled by the
-        // time this fires, so re-asserting a position here can pin the
-        // page to a half-restored offset instead of protecting it.
+        // WebKit can stop drawing a classic scrollbar once the router swaps
+        // <body>; toggling overflow makes it rebuild before the page paints.
+        const html = document.documentElement;
+        html.style.overflowY = 'hidden';
+        void html.offsetWidth;
+        html.style.overflowY = '';
+        // Focus the new page's content so it is announced, like a real
+        // navigation; preventScroll keeps the viewport where it is.
         document.getElementById('main')?.focus({ preventScroll: true });
       });
 

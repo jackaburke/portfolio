@@ -1,5 +1,8 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/instrument-sans';
+
+/* The @font-face lives in Layout.astro, not fontsource's css: theirs is
+   font-display: swap, which makes text visibly jump into the real font on
+   a hard load. optional never swaps mid-view. */
 
 @theme {
   --font-sans: 'Instrument Sans Variable', helvetica, arial, sans-serif;
@@ -54,10 +57,8 @@
 :root {
   --nav-h: 74px;
 
-  /* Status bar clearance. Zero in the browser, where Safari's own chrome
-     already occupies that strip, and only non-zero once the site is opened
-     from the home screen with no chrome above it. Held in a variable so it
-     is settable in tests, which cannot produce a real inset. */
+  /* Status bar clearance — only non-zero when opened from the home screen.
+     A variable so tests can set it. */
   --safe-top: env(safe-area-inset-top);
 }
 
@@ -67,51 +68,50 @@
   }
 }
 
-/* html itself has no background of its own, so the canvas is only painted
-   by body's background propagating up to it. During a view transition the
-   page rendering is replaced by the snapshot overlay, and anything the
-   snapshots do not cover falls through to that canvas — which is where a
-   white flash comes from. Saved to the home screen there is no browser
-   chrome hiding the edges, so it shows. Painting html explicitly gives the
-   canvas a colour of its own that does not depend on body. Same cream as
-   body, so nothing changes visually in the browser. */
+/* Paint the canvas explicitly so view-transition snapshots never fall
+   through to a white background */
 html {
   background-color: var(--color-page);
 }
 
-/* viewport-fit=cover lets the page run under the home indicator once
-   Safari's bottom bar is hidden, so reserve that strip. Safari reports 0
-   here while the bar is showing, which is also when the viewport is at its
-   shortest — so this only adds height in the state that has the room for
-   it, and cannot make an svh-sized page scrollable. */
+/* viewport-fit=cover lets the page run under the home indicator, so
+   reserve that strip */
 body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* The navbar is transition:name="header", so its group animation morphs it
-   between pages — that is the slide as the width changes between a
-   scrolling and a non-scrolling page, and it is left untouched here.
-   What is removed is the snapshot cross-fade Astro layers on top: it fades
-   old out and new in with mix-blend-mode: plus-lighter, which in WebKit
-   drops the header to the page background for roughly a third of the
-   transition rather than holding steady.
-   The outgoing snapshot is the one held visible, not the incoming one —
-   under transition:persist the incoming snapshot comes up empty (verified:
-   holding it instead still leaves the header blank). Since the header
-   renders identically on every page, showing the outgoing snapshot for the
-   duration is seamless, and the real persisted element takes over the
-   moment the transition ends.
-   !important is required because CSS animations outrank normal
-   declarations. */
-::view-transition-old(header) {
-  animation: none !important;
-  opacity: 1 !important;
-  mix-blend-mode: normal !important;
+/* Keep every page just barely scrollable on mobile: on a page that can't
+   scroll, Safari re-expands its collapsed toolbars, so arriving on one
+   resizes the viewport. lvh is the toolbar-hidden height, so +2px always
+   overflows. */
+@media (width < 992px) {
+  body {
+    min-height: calc(100lvh + 2px);
+    padding-top: calc(3.5rem + var(--safe-top));
+  }
+
+  /* Fixed, not sticky: the instant scroll jump on back navigation lags a
+     sticky header by a frame, flashing the page behind it. (Attribute
+     selector to outrank the sticky utility class.) */
+  header[data-astro-transition-persist] {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+  }
 }
 
-::view-transition-new(header) {
-  animation: none !important;
-  opacity: 0 !important;
+/* fade() only sets the old/new durations; the root group would keep the
+   UA's 0.25s default and hold the overlay up that long */
+::view-transition-group(root) {
+  animation-duration: 0.08s;
+}
+
+/* No separate snapshot group for the header — its rasterized snapshot
+   blurred the logo and held the overlay up for the UA's 250ms default.
+   It's identical on every page, so it rides in the root snapshot.
+   transition:persist matches by attribute, so it still works. */
+header {
+  view-transition-name: none !important;
 }
 
 /* scrollbar-color is Firefox-only here — setting it in Chrome would disable
@@ -198,9 +198,13 @@ a {
   text-underline-offset: 2px;
 }
 
-a:hover {
-  opacity: 0.75;
-  text-decoration: underline;
+/* hover: hover keeps taps from leaving a stuck hover state on touch —
+   the persisted header would otherwise carry it across navigations */
+@media (hover: hover) {
+  a:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+  }
 }
 
 :focus-visible {
@@ -280,10 +284,16 @@ header button:focus-visible,
 
 /* Card hover underlines the title — unless the pointer is on a footer link,
    which then underlines itself alone */
-.project-card:has(.card-link:focus-visible) .card-title,
-.project-card:hover:not(:has(.card-ext:hover)) .card-title {
+.project-card:has(.card-link:focus-visible) .card-title {
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .project-card:hover:not(:has(.card-ext:hover)) .card-title {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 .project-card:has(.card-link:focus-visible) {
@@ -291,10 +301,12 @@ header button:focus-visible,
   outline-offset: 2px;
 }
 
-.card-ext:hover {
-  opacity: 0.75;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+@media (hover: hover) {
+  .card-ext:hover {
+    opacity: 0.75;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce), (hover: none) {
