@@ -178,6 +178,17 @@ const personSchema = {
           history.back();
         }
       });
+
+      // Cached thumbnails (the common case) are left alone entirely — no
+      // opacity, no compositing layer, nothing to flash. Only images still
+      // loading get the fade class.
+      document.addEventListener('astro:page-load', () => {
+        document.querySelectorAll<HTMLImageElement>('.thumb').forEach((img) => {
+          if (img.complete) return;
+          img.classList.add('fade-in');
+          img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+        });
+      });
     </script>
   </body>
 </html>

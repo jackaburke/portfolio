@@ -315,8 +315,30 @@ header button:focus-visible,
   }
 }
 
+/* Without this, the client router rebuilds these <img> elements from
+   scratch on every navigation (it never persists them), so returning to
+   the homepage would otherwise pop the thumbnails in abruptly, reading as
+   a reload. Only images still loading get faded (see astro:page-load
+   listener in Layout.astro) — opacity/transition are applied via a class,
+   not unconditionally on .thumb, so an already-cached image never gets an
+   opacity below 1 and never needs its own compositing layer. */
 .thumb {
   @apply aspect-[16/9] w-full object-cover;
+}
+
+.thumb.fade-in {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.thumb.fade-in.is-loaded {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb.fade-in {
+    transition: none;
+  }
 }
 
 /* flex-1 pushes the footer strip to the bottom of equal-height cards */
