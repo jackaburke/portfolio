@@ -108,8 +108,13 @@ const speculationRules = {
 
   /* #484c3d composited under the backdrop's 35% rgb(43 47 40) comes out at
      #3e4236. Applying that as a real background-color keeps the header
-     matching the dimmed page while giving Safari a solid colour to sample. */
+     matching the dimmed page while giving Safari a solid colour to sample —
+     it cannot sample a gradient, so the colour stays solid at the dark end
+     and the gradient rides on top as a background-image. The light end is
+     the undimmed green itself, so the bar meets the status bar strip above
+     it — which Safari paints from theme-color — with no seam. */
   header:has(~ #mobile-menu:popover-open) {
     background-color: #3e4236;
+    background-image: linear-gradient(to top, #3e4236, var(--color-primary));
   }
 </style>
