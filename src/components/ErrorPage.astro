@@ -12,7 +12,7 @@ interface Props {
 const { code, heading, message } = Astro.props;
 ---
 
-<Layout title={`${heading} — ${site.name}`}>
+<Layout title={`${heading} - ${site.name}`}>
   <Navbar />
   <main id="main" tabindex="-1" class="flex flex-col items-center text-center px-6 py-24">
     <p class="font-mono text-nav text-faint mb-3">{code}</p>

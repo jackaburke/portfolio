@@ -10,4 +10,4 @@ thumbAlt: 'App screens from this portfolio website'
 order: 4
 ---
 
-Case study to be written — problem, approach, results.
+Case study to be written: problem, approach, results.

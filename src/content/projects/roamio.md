@@ -1,6 +1,6 @@
 ---
 title: Roamio
-description: Travel planning app — itineraries, maps and shared trips.
+description: Travel planning app with itineraries, maps and shared trips.
 tools: [Ruby on Rails]
 links:
   - { label: GitHub, url: 'https://github.com' }
@@ -10,4 +10,4 @@ featured: true
 order: 2
 ---
 
-Case study to be written — problem, approach, results.
+Case study to be written: problem, approach, results.

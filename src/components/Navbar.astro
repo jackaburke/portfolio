@@ -53,7 +53,7 @@ const speculationRules = {
   </nav>
 
   <!-- Native popover: the browser wires up open/close, Escape, light-dismiss
-       and the expanded state — no JavaScript involved -->
+       and the expanded state, with no JavaScript involved -->
   <button type="button" popovertarget="mobile-menu" class="lg:hidden cursor-pointer text-nav font-semibold text-inverse-soft">
     Menu
   </button>
@@ -95,7 +95,7 @@ const speculationRules = {
 <style>
   /* Leave the header strip undimmed. Safari tints its toolbar from the
      sticky header's own background-color, and a translucent overlay
-     sitting on top of the header does not change that colour — so the
+     sitting on top of the header does not change that colour, so the
      page would darken while the toolbar stayed bright green. The header
      darkens itself instead, below. */
   #mobile-menu::backdrop {
@@ -108,15 +108,15 @@ const speculationRules = {
 
   /* #484c3d composited under the backdrop's 35% rgb(43 47 40) comes out at
      #3e4236. Applying that as a real background-color keeps the header
-     matching the dimmed page while giving Safari a solid colour to sample —
+     matching the dimmed page while giving Safari a solid colour to sample:
      it cannot sample a gradient, so the colour stays solid at the dark end
      and the gradient rides on top as a background-image. The light end is
      the undimmed green itself, so the bar meets the status bar strip above
-     it — which Safari paints from theme-color — with no seam.
+     it, which Safari paints from theme-color, with no seam.
 
      Scoped to mobile: the menu is only lg:hidden, so widening the window
      past the breakpoint leaves the popover open in the DOM and :has() still
-     matching — which dressed the desktop header in the dark bar. */
+     matching, which dressed the desktop header in the dark bar. */
   @media (width < 992px) {
     header:has(~ #mobile-menu:popover-open) {
       background-color: #3e4236;

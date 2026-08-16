@@ -32,7 +32,7 @@
   --color-edge: rgb(43 47 40 / 14%);
   --color-edge-inverse: rgb(240 238 227 / 20%);
 
-  /* Fieldnote type scale — one place to retune any size instead of hunting
+  /* Fieldnote type scale: one place to retune any size instead of hunting
      arbitrary text-[Npx] values across components. Font-size only (no
      paired line-height), so swapping a bracket value for a token here is a
      1:1 visual no-op; leading is still set per-usage where it matters. */
@@ -48,16 +48,16 @@
   --text-heading-lg: 26px; /* 404/500 heading, desktop */
   --text-title: 24px; /* case-study title, mobile */
   --text-title-lg: 30px; /* case-study title, desktop */
-  --text-logo: clamp(17px, 4.4vw, 20px); /* navbar name — already caps at 20px well under lg */
-  --text-name: clamp(19px, 5.4vw, 24px); /* sidebar name — already caps at 24px well under lg */
-  --text-display: clamp(20px, 6.2vw, 26px); /* homepage tagline — already caps at 26px well under lg */
+  --text-logo: clamp(17px, 4.4vw, 20px); /* navbar name, already caps at 20px well under lg */
+  --text-name: clamp(19px, 5.4vw, 24px); /* sidebar name, already caps at 24px well under lg */
+  --text-display: clamp(20px, 6.2vw, 26px); /* homepage tagline, already caps at 26px well under lg */
 }
 
-/* Desktop navbar height — the sticky sidebar offsets hang off this */
+/* Desktop navbar height; the sticky sidebar offsets hang off this */
 :root {
   --nav-h: 74px;
 
-  /* Status bar clearance — only non-zero when opened from the home screen.
+  /* Status bar clearance, only non-zero when opened from the home screen.
      A variable so tests can set it. */
   --safe-top: env(safe-area-inset-top);
 }
@@ -92,7 +92,7 @@ body {
      both were the cream page colour: the rubber-band area itself, which
      iOS Safari paints from body's background-COLOR (not the root's, which
      is why colouring html does nothing here), and below it body's own
-     padding-top — the space reserved for the header. So the colour is the
+     padding-top, the space reserved for the header. So the colour is the
      header's green, and the gradient hands the page back to cream once
      past that padding. Pulling down then just stretches the green bar. */
   body {
@@ -109,7 +109,7 @@ body {
      background-color of fixed/sticky elements at the viewport edge, falling
      back to body, then the root. The header supplied a dark green tint but
      the root still said cream, and Safari took its light/dark chrome from
-     that — black URL text on a dark green bar, worst at the top of a page
+     that: black URL text on a dark green bar, worst at the top of a page
      where the address pill drops its fill entirely. So the root has to agree
      with the header. Unlike the rubber band above, which reads body's
      colour, this one is only ever sampled, never painted: body covers the
@@ -136,7 +136,7 @@ body {
   animation-duration: 0.08s;
 }
 
-/* No separate snapshot group for the header — its rasterized snapshot
+/* No separate snapshot group for the header: its rasterized snapshot
    blurred the logo and held the overlay up for the UA's 250ms default.
    It's identical on every page, so it rides in the root snapshot.
    transition:persist matches by attribute, so it still works. */
@@ -144,7 +144,7 @@ header {
   view-transition-name: none !important;
 }
 
-/* scrollbar-color is Firefox-only here — setting it in Chrome would disable
+/* scrollbar-color is Firefox-only here; setting it in Chrome would disable
    the -webkit rules below, which carry the rounded shape */
 @supports (-moz-appearance: none) {
   html {
@@ -228,7 +228,7 @@ a {
   text-underline-offset: 2px;
 }
 
-/* hover: hover keeps taps from leaving a stuck hover state on touch —
+/* hover: hover keeps taps from leaving a stuck hover state on touch;
    the persisted header would otherwise carry it across navigations */
 @media (hover: hover) {
   a:hover {
@@ -312,7 +312,7 @@ header button:focus-visible,
   transform: translateY(-4px);
 }
 
-/* Card hover underlines the title — unless the pointer is on a footer link,
+/* Card hover underlines the title, unless the pointer is on a footer link,
    which then underlines itself alone */
 .project-card:has(.card-link:focus-visible) .card-title {
   text-decoration: underline;
@@ -349,7 +349,7 @@ header button:focus-visible,
    scratch on every navigation (it never persists them), so returning to
    the homepage would otherwise pop the thumbnails in abruptly, reading as
    a reload. Only images still loading get faded (see astro:page-load
-   listener in Layout.astro) — opacity/transition are applied via a class,
+   listener in Layout.astro): opacity/transition are applied via a class,
    not unconditionally on .thumb, so an already-cached image never gets an
    opacity below 1 and never needs its own compositing layer. */
 .thumb {

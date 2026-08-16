@@ -1,6 +1,6 @@
 ---
 title: 4th Year Dissertation
-description: Final-year research project — topic and abstract to be filled in.
+description: Final-year research project. Topic and abstract to be filled in.
 tools: [Python]
 links:
   - { label: Read paper, url: 'https://example.com/paper.pdf' }
@@ -10,4 +10,4 @@ featured: true
 order: 1
 ---
 
-Case study to be written — problem, approach, results.
+Case study to be written: problem, approach, results.

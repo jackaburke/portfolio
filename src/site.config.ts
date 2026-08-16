@@ -1,4 +1,4 @@
-// All personal info lives here — swap the placeholders for real content.
+// All personal info lives here: swap the placeholders for real content.
 const university = 'University of Sheffield';
 
 export const site = {
@@ -7,7 +7,7 @@ export const site = {
   tagline:
     'Technology consultant building considered, dependable products.',
   description:
-    'Portfolio of Jack Burke, technology consultant -- selected projects, research and apps.',
+    'Portfolio of Jack Burke, technology consultant. Selected projects, research and apps.',
 
   university,
 

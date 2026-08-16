@@ -21,11 +21,14 @@ const others = projects.filter((p) => !p.data.featured);
     <div class="flex-1 min-w-0 lg:flex lg:flex-col">
       <main id="main" tabindex="-1" class="lg:flex-1 lg:px-12 lg:pt-12 scroll-mt-[56px] lg:scroll-mt-[var(--nav-h)]">
         <section class="p-6 border-b border-divider lg:p-0 lg:pb-11 lg:mb-12">
-          <p
+          <!-- The page's h1. It reads as body copy by design, but it is the
+               one line that describes this page, and it belongs inside <main>
+               rather than in the sidebar's complementary landmark. -->
+          <h1
             class="max-w-[660px] text-display leading-[1.4] font-medium tracking-[-.01em] [text-wrap:pretty]"
           >
             {site.tagline}
-          </p>
+          </h1>
         </section>
 
         <section id="projects" class="px-5 pt-6 pb-7 lg:p-0 scroll-mt-[56px] lg:scroll-mt-[var(--nav-h)]">

@@ -23,9 +23,12 @@ import profilePhoto from '../assets/profile-photo.jpg';
     class="profile-photo w-[110px] h-[110px] lg:w-[150px] lg:h-[150px] rounded-full border-[1.5px] border-[rgba(240,238,227,.4)] flex-none object-cover"
   />
 
-  <h1 class="profile-name mt-4 lg:mt-[26px] mb-[2px] lg:mb-[3px] text-name font-semibold text-inverse">
+  <!-- Deliberately not a heading: the sidebar is a complementary landmark, so
+       an h1 here would put the page's only top-level heading outside <main>.
+       The homepage tagline carries the h1 instead. -->
+  <p class="profile-name mt-4 lg:mt-[26px] mb-[2px] lg:mb-[3px] text-name font-semibold text-inverse">
     {site.name}
-  </h1>
+  </p>
   <p class="mb-4 lg:mb-5 text-detail font-medium text-accent">{site.role}</p>
 
   <div class="socials flex flex-col gap-2 w-full mb-[22px] lg:mb-9">
