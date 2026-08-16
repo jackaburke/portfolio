@@ -64,7 +64,10 @@ const ogImage = await getImage({ src: thumbImage, width: 1200 });
   </section>
 
   <div class="lg:flex lg:justify-center">
-    <div class="w-full max-w-[760px] min-w-0 flex flex-col min-h-[60svh]">
+    <!-- mx-auto, not just the lg:justify-center above: between 760px and the
+         desktop breakpoint (landscape phones) the column would otherwise sit
+         hard left while the hero centred, so the two disagreed -->
+    <div class="w-full max-w-[760px] mx-auto min-w-0 flex flex-col min-h-[60svh]">
       <main id="main" tabindex="-1" class="flex-1 px-6 pt-8 pb-4 lg:px-0 lg:pt-10 scroll-mt-[56px] lg:scroll-mt-[var(--nav-h)]">
         <article class="text-body leading-[1.65] font-medium text-muted [&_h2]:text-foreground [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:mb-4 [&_a]:text-link">
           <Content />
