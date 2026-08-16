@@ -75,9 +75,12 @@ html {
 }
 
 /* viewport-fit=cover lets the page run under the home indicator, so
-   reserve that strip */
+   reserve that strip. The page colour lives here rather than on a utility
+   class in the markup because the mobile rules below have to override it,
+   and an element selector cannot outrank a class. */
 body {
   padding-bottom: env(safe-area-inset-bottom);
+  background-color: var(--color-page);
 }
 
 /* Keep every page just barely scrollable on mobile: on a page that can't
@@ -85,9 +88,21 @@ body {
    resizes the viewport. lvh is the toolbar-hidden height, so +2px always
    overflows. */
 @media (width < 992px) {
+  /* Pulling down past the top shows two bands under the fixed header, and
+     both were the cream page colour: the rubber-band area itself, which
+     iOS Safari paints from body's background-COLOR (not the root's, which
+     is why colouring html does nothing here), and below it body's own
+     padding-top — the space reserved for the header. So the colour is the
+     header's green, and the gradient hands the page back to cream once
+     past that padding. Pulling down then just stretches the green bar. */
   body {
     min-height: calc(100lvh + 2px);
     padding-top: calc(3.5rem + var(--safe-top));
+    background-color: var(--color-primary);
+    background-image: linear-gradient(
+      var(--color-primary) 0 calc(3.5rem + var(--safe-top)),
+      var(--color-page) 0
+    );
   }
 
   /* Fixed, not sticky: the instant scroll jump on back navigation lags a
