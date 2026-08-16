@@ -105,6 +105,21 @@ body {
     );
   }
 
+  /* Safari 26 ignores theme-color and tints its toolbar from the
+     background-color of fixed/sticky elements at the viewport edge, falling
+     back to body, then the root. The header supplied a dark green tint but
+     the root still said cream, and Safari took its light/dark chrome from
+     that — black URL text on a dark green bar, worst at the top of a page
+     where the address pill drops its fill entirely. So the root has to agree
+     with the header. Unlike the rubber band above, which reads body's
+     colour, this one is only ever sampled, never painted: body covers the
+     viewport, so nothing visible changes. It also covers the frame during a
+     router swap where the persisted header is detached and the root is all
+     Safari has left to sample. */
+  html {
+    background-color: var(--color-primary);
+  }
+
   /* Fixed, not sticky: the instant scroll jump on back navigation lags a
      sticky header by a frame, flashing the page behind it. (Attribute
      selector to outrank the sticky utility class.) */
