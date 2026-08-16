@@ -33,10 +33,6 @@ const personSchema = {
   url: new URL('/', Astro.site).toString(),
   image: new URL('/og-image.png', Astro.site).toString(),
   sameAs: [site.links.linkedin, site.links.github],
-  alumniOf: {
-    '@type': 'CollegeOrUniversity',
-    name: site.university,
-  },
 };
 ---
 
