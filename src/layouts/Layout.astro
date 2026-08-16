@@ -14,12 +14,12 @@ interface Props {
 }
 
 const {
-  title = `${site.name} — ${site.role}`,
+  title = `${site.name} - ${site.role}`,
   description = site.description,
   image = '/og-image.png',
   imageWidth = 1200,
   imageHeight = 630,
-  imageAlt = `${site.name} — ${site.role}`,
+  imageAlt = `${site.name} - ${site.role}`,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -58,7 +58,7 @@ const personSchema = {
          stylesheet instead of being discovered only after the CSS parses -->
     <link rel="preload" href={instrumentSansWoff2} as="font" type="font/woff2" crossorigin />
 
-    <!-- font-display: optional — on a hard load the text either paints in
+    <!-- font-display: optional. On a hard load the text either paints in
          this font or stays on the fallback; it never swaps mid-view -->
     <style
       is:inline
@@ -98,7 +98,7 @@ const personSchema = {
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
 
-    <!-- Touch devices skip the View Transition API — its snapshots freeze
+    <!-- Touch devices skip the View Transition API: its snapshots freeze
          the page while Safari's chrome resizes the viewport. Without it the
          router falls back to a plain instant swap. -->
     <script is:inline>
@@ -139,7 +139,7 @@ const personSchema = {
         return nativeScrollTo({ left: x, top: touch && y === 0 ? 1 : y, behavior: 'instant' });
       }) as typeof window.scrollTo;
 
-      // The header is transition:persist'd, which freezes its DOM — so the
+      // The header is transition:persist'd, which freezes its DOM, so the
       // desktop About/Projects highlight is updated by hand on each swap.
       function syncNavActive() {
         const isProjects = location.pathname.startsWith('/projects/');
@@ -164,7 +164,12 @@ const personSchema = {
         html.style.overflowY = '';
         // Focus the new page's content so it is announced, like a real
         // navigation; preventScroll keeps the viewport where it is.
-        document.getElementById('main')?.focus({ preventScroll: true });
+        // Prefer the h1: on a case study it sits in the hero, above <main>, so
+        // focusing <main> would start the reading order below the page title
+        // and the visitor would never hear which project they had opened.
+        const target = document.querySelector<HTMLElement>('h1') ?? document.getElementById('main');
+        if (target && !target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target?.focus({ preventScroll: true });
       });
 
       document.addEventListener('click', (event) => {
@@ -175,7 +180,22 @@ const personSchema = {
         }
       });
 
-      // Cached thumbnails (the common case) are left alone entirely — no
+      // A popover is not modal, so Tab walks straight out of the open menu and
+      // on into the page behind it, which the backdrop has dimmed. Close it on
+      // the way out: that is the disclosure-menu behaviour a keyboard user
+      // expects, and it keeps the dimming honest about what is reachable.
+      // relatedTarget is null when the whole window loses focus, which should
+      // leave the menu alone.
+      document.addEventListener('focusout', (event) => {
+        const menu = document.getElementById('mobile-menu');
+        if (!menu?.matches(':popover-open')) return;
+        const next = (event as FocusEvent).relatedTarget as HTMLElement | null;
+        if (!next) return;
+        if (menu.contains(next) || next.closest('[popovertarget="mobile-menu"]')) return;
+        menu.hidePopover();
+      });
+
+      // Cached thumbnails (the common case) are left alone entirely: no
       // opacity, no compositing layer, nothing to flash. Only images still
       // loading get the fade class.
       document.addEventListener('astro:page-load', () => {

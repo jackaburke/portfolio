@@ -10,7 +10,7 @@ const projects = defineCollection({
       tools: z.array(z.string()),
       // External links shown in the card footer strip, left to right
       links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
-      // Card thumbnail — optimized to WebP + srcset by astro:assets at build time
+      // Card thumbnail, optimized to WebP + srcset by astro:assets at build time
       thumbImage: image(),
       thumbAlt: z.string(),
       featured: z.boolean().default(false),

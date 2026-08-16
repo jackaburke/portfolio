@@ -33,11 +33,25 @@ const ogImage = await getImage({ src: thumbImage, width: 1200 });
 >
   <Navbar active="Projects" />
 
-  <section class="page-hero bg-primary border-b border-divider-strong">
+  <!-- aria-labelledby gives this section an accessible name, which promotes it
+       to a region landmark. Without it the title, the back link and the project
+       links sat outside every landmark, so anyone navigating by landmark went
+       straight from the header into the body copy and never met them. The hero
+       cannot simply move inside <main> instead: it is full-bleed while <main>
+       is a 760px column, and the min-h below is measured to exclude it. -->
+  <section
+    class="page-hero bg-primary border-b border-divider-strong"
+    aria-labelledby="project-title"
+  >
     <div class="max-w-[760px] mx-auto px-6 lg:px-0 pt-7 pb-8 lg:pt-11 lg:pb-10">
       <a href="/" data-back-link class="text-detail font-medium text-inverse-soft no-underline">&larr; All projects</a>
 
-      <h1 class="mt-4 mb-2 text-title lg:text-title-lg font-semibold text-inverse [text-wrap:balance]">{title}</h1>
+      <h1
+        id="project-title"
+        class="mt-4 mb-2 text-title lg:text-title-lg font-semibold text-inverse [text-wrap:balance]"
+      >
+        {title}
+      </h1>
       <p class="mb-5 text-body leading-[1.55] font-medium text-inverse-soft">{description}</p>
 
       <div class="flex flex-wrap items-center gap-x-[18px] gap-y-[10px]">

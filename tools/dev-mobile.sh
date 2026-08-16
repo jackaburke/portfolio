@@ -15,18 +15,18 @@ lan_ip() {
 
 IP=$(lan_ip || true)
 if [ -z "$IP" ]; then
-  echo "dev-mobile: no LAN address found — are you on Wi-Fi?" >&2
+  echo "dev-mobile: no LAN address found. Are you on Wi-Fi?" >&2
   exit 1
 fi
 
-# The Bonjour record pins one port, so pick a free one before advertising it —
+# The Bonjour record pins one port, so pick a free one before advertising it;
 # otherwise Astro slides to the next port and the URL below is a lie.
 while lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; do
   echo "dev-mobile: port $PORT is busy, trying $((PORT + 1))" >&2
   PORT=$((PORT + 1))
 done
 
-# Proxy-register $NAME.local at this machine — no sudo, no system hostname change.
+# Proxy-register $NAME.local at this machine: no sudo, no system hostname change.
 dns-sd -P "$NAME" _http._tcp local "$PORT" "$NAME.local" "$IP" >/dev/null 2>&1 &
 DNS_PID=$!
 trap 'kill "$DNS_PID" 2>/dev/null || true' EXIT INT TERM
